@@ -66,23 +66,4 @@ userSchema.statics.login = async function (email, password) {
     return user
 }
 
-// Change password
-userSchema.statics.password = async function (_id, password) {
-    if (!password) {
-        throw Error('Password must be filled')
-    } else if (!validator.isStrongPassword(password)) {
-        throw Error('Password not strong enough')
-    }
-
-    // find user 
-    const exists = await this.findOne({_id: _id})
-
-    const salt = await bcrypt.genSalt(10)
-    const hash = await bcrypt.hash(password, salt)
-
-    const user = await this.update({ password: hash })
-
-    return user
-}
-
 module.exports = mongoose.model('User', userSchema);
